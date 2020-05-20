@@ -1,0 +1,10 @@
+{% if all_colors %}
+
+<h3>All Colors:</h3>
+
+{% for color in all_colors %}
+    <a href="{% url 'leds:color' color.label %}">{{ color.label }}</a>
+    <br>
+{% endfor %}
+
+{% endif %}
