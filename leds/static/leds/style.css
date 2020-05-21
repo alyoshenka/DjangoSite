@@ -1,0 +1,11 @@
+button.led {
+    width: 35;
+    margin-bottom: 5;
+    color: var(--color);
+}
+
+button.color {
+    width: 70;
+    height: 30;
+    color: var(--color);
+}

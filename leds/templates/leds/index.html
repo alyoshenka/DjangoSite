@@ -1,3 +1,25 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'leds/style.css' %}">
+
 <p>LEDs index (html)</p>
 
-<a href='colors/'>View Colors</a>
+<a href='colors/'>View colors</a>
+
+{% if board and arr and colors %}
+    <p>Size: {{ board.size }}</p>
+    <p>Dimensions: {{ board.width }} x {{ board.height }}</p>
+    <p>Colors:</p>
+    <p>
+    {% for color in colors %}
+        <button class="color">{{ color.label }}</button>
+    {% endfor %}
+    </p>
+    <br>
+    <br>
+    {% for col in arr %}
+        {% for led in col %}
+            <button class="led" style="--color: blue;">{{ led.index }}</button>
+        {% endfor %}
+        <br>
+    {% endfor %}
+{% endif %}
