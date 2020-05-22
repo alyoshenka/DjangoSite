@@ -6,7 +6,7 @@ class Color(models.Model):
     r = models.PositiveSmallIntegerField(default=0)
     g = models.PositiveSmallIntegerField(default=0)
     b = models.PositiveSmallIntegerField(default=0)
-    a = models.PositiveSmallIntegerField(default=0)
+    a = models.PositiveSmallIntegerField(default=255)
 
     def __str__(self):
         return self.label + " (" \
