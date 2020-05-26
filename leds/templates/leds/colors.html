@@ -5,9 +5,7 @@
 <p>Colors:</p>
 <p>
 {% for color in colors %}
-    {% with color.r as r  and color.g as g  and color.b as b %}
-    <button class="color" onclick="changeCurrentColor(this, {{ r }}, {{ g }}, {{ b }})" style="--background-color: gray;">{{ color.label }}</button>
-    {% endwith %}
+    <button class="color" onclick="changeCurrentColor(this, '{{ color.json }}')">{{ color.label }}</button>
 {% endfor %}
 </p>
 <br>

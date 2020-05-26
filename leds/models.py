@@ -1,4 +1,5 @@
 from django.db import models
+from django.core import serializers
 
 
 class Color(models.Model):
@@ -6,13 +7,15 @@ class Color(models.Model):
     r = models.PositiveSmallIntegerField(default=0)
     g = models.PositiveSmallIntegerField(default=0)
     b = models.PositiveSmallIntegerField(default=0)
-    a = models.PositiveSmallIntegerField(default=255)
 
     def __str__(self):
         return self.label + " (" \
             + str(self.r) + "," + str(self.g) \
-            + "," + str(self.b) + "," \
-            + str(self.a) + ")"
+            + "," + str(self.b) + ")"
+
+    def json(self):
+        dat = serializers.serialize("json", [self])
+        return dat
 
 class LED(models.Model):
     index = models.IntegerField(default=0)
@@ -22,6 +25,10 @@ class LED(models.Model):
 
     def __str__(self):
         return str(self.index)
+
+    def json(self):
+        dat = serializers.serialize("json", [self])
+        return dat
 
     def color_style(self):
         return "--color: " + self.color.label + ";"
@@ -34,6 +41,10 @@ class Board(models.Model):
 
     def __str__(self):
         return self.label
+
+    def json(self):
+        dat = serializers.serialize("json", self)
+        return dat
 
     def default_init(self):
         self.leds = []

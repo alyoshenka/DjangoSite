@@ -28,7 +28,7 @@ def color(request, color_name):
 
 def all_colors(request):
     """Show all the colors"""
-    all_colors = Color.objects.all()
+    all_colors = Color.objects.all()    
     context = {
         'all_colors': all_colors
     }
