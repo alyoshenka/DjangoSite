@@ -2,11 +2,15 @@
 
 <a href='colors/'>View colors</a>
 
-<p>Colors:</p>
-<p>
-{% for color in colors %}
-    <button class="color" onclick="changeCurrentColor(this, '{{ color.json }}')">{{ color.label }}</button>
-{% endfor %}
-</p>
 <br>
+<p>Colors:</p>
+<p>Current Color: {{ current_color }}</p>
+<br>
+
+{% for color in colors %}
+<form action='colorClick/{{ color.label }}/' method='GET'>
+    <button class='color' type='submit' onclick="changeCurrentColor(
+        this, '{{ color.json }}')">{{ color.label }}</button>
+</form>
+{% endfor %}
 <br>

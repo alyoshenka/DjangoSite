@@ -1,7 +1,5 @@
 var currentColorButton = null;
-var R = 0;
-var G = 0;
-var B = 0;
+var currentColorJSON = null;
 
 function changeCurrentColor(elem, color_json) {
     var color = JSON.parse(color_json)[0].fields;
@@ -11,20 +9,16 @@ function changeCurrentColor(elem, color_json) {
 
     if(elem == currentColorButton){
         currentColorButton = null;
+        currentColorJSON = null;
         elem.style.backgroundColor = "gray";
-        R = 0;
-        G = 0;
-        B = 0;
         console.log("no color button");
     } else {
         if (null != currentColorButton){
             currentColorButton.style.backgroundColor = "gray";
         }
         currentColorButton = elem;
-        R = r;
-        G = g;
-        B = b;
-        elem.style.backgroundColor = toRGB_rgb(r, g, b);
+        currentColorJSON = color;
+        elem.style.backgroundColor = toRGB_rgb(color.r, color.g, color.b);
 
         console.log("new color button");
     }
@@ -38,7 +32,7 @@ function changeLEDColor(elem) {
         console.log("no color selected");
     } else {
         // color
-        elem.style.backgroundColor = toRGB_rgb(R, G, B);
+        elem.style.backgroundColor = toRGB_json(currentColorJSON);
 
         console.log("change led color");
     }
