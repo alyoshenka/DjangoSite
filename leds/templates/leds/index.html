@@ -1,31 +1,16 @@
 {% extends "leds/base.html" %}
 {% block body %}
 
-<p>LEDs index (html)</p>
+    <p>LEDs index (html)</p>
 
-<a href='colors/'>View colors</a>
+    {% block colors %}
+        {% include "leds/colors.html" %}
+    {% endblock %}
 
-{% if board and arr and colors %}
-    <p>Size: {{ board.size }}</p>
-    <p>Dimensions: {{ board.width }} x {{ board.height }}</p>
-    <p>Colors:</p>
-    <p>
-    {% for color in colors %}
-        {% with color.r as r  and color.g as g  and color.b as b %}
-        <button class="color" onclick="changeColor(this, {{ r }}, {{ g }}, {{ b }})" style="--background-color: gray;">{{ color.label }}</button>
-        {% endwith %}
-    {% endfor %}
-    </p>
-    <br>
-    <br>
-    {% for col in arr %}
-        {% for led in col %}
-            {% with s=led.color_style %}
-            <button class="led" style="--color: blue;">{{ led.index }}</button>
-            {% endwith %}
-        {% endfor %}
-        <br>
-    {% endfor %}
-{% endif %}
+ 
+
+    {% block board %}
+        {% include "leds/board.html" %}
+    {% endblock %}
 
 {% endblock %}

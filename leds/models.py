@@ -21,7 +21,7 @@ class LED(models.Model):
     )
 
     def __str__(self):
-        return self.index
+        return str(self.index)
 
     def color_style(self):
         return "--color: " + self.color.label + ";"
@@ -30,12 +30,15 @@ class Board(models.Model):
     height = models.PositiveSmallIntegerField(default=8)
     width = models.PositiveSmallIntegerField(default=32)
     label = models.CharField(default="board", max_length=30)
+    leds = []
 
-    def __init__(self):
-        super().__init__()
+    def __str__(self):
+        return self.label
+
+    def default_init(self):
         self.leds = []
         for i in range(self.width * self.height):
-            self.leds.append(LED(index=i))
+            self.leds.append(LED.objects.get(index=i))
 
     def size(self):
         return self.width * self.height
