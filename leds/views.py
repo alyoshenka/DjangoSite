@@ -13,7 +13,11 @@ def index(request):
     board.default_init()
     arr = board.display_arr()
     all_colors = Color.objects.all()
-    current_color = request.session['current_color']
+    try:
+        current_color = request.session['current_color']
+    except:
+        request.session['current_color'] = 'none'
+        current_color = 'none'
     context = { 
         'board': board,
         'arr': arr,
