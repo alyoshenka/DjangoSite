@@ -8,7 +8,7 @@
 <br>
 
 {% for color in colors %}
-<form action='colorClick/{{ color.label }}/' method='GET'>
+<form class='led' action='colorClick/{{ color.label }}/' method='GET'>
     <button class='color' type='submit' onclick="changeCurrentColor(
         this, '{{ color.json }}')">{{ color.label }}</button>
 </form>

@@ -1,16 +1,19 @@
 :root{
     --button-size: 30px;
-    --button-margin: 7px;
+    --button-margin: 5px;
 }
 
 button.led {
     width: var(--button-size);
     height: var(--button-size);
-    margin-top: var(--button-margin);
     margin-left: var(--button-margin);
 
     text-align: center;
     font-size: 10px;
+}
+
+form.led {
+    display: inline;
 }
 
 button.color {

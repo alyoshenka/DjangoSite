@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 import json
 
-from .models import Color, Board
+from .models import Color, Board, LED
 
 
 def index(request):
@@ -52,6 +52,11 @@ def set_led_color(request, board_label, led_idx, color_label):
 
 # session testing
 
+def selected_color(request):
+    _label = request.session['current_color']
+    color = None if _label == 'none' else Color.objects.get(label=_label)
+    return color
+
 def color_click(request, color_label):
     color = Color.objects.get(label=color_label)
     obj = json.loads(color.json())[0]
@@ -67,15 +72,16 @@ def color_click(request, color_label):
     # return HttpResponse(request.session['current_color'])
     return HttpResponseRedirect(reverse('leds:index'))
 
-def LED_click(request):
-    # get selected color from js
+def LED_click(request, led_index):
+    # get selected color
     # find associated color by label
-    # find LED associated to button (by idx)
-    # set LED color to color
-    # save
-    # return to original page
-
-    request.session['test'] = 'pass'
-    html="<html><body>" + request.session['test'] + "</body></html>"
-    
-    return HttpResponse(html)
+    color = selected_color(request)
+    if color is not None:
+        # find LED associated to button (by idx)
+        led = LED.objects.get(index=led_index)
+        # set LED color to color
+        led.color = color
+        # save
+        led.save()
+    # return to original page   
+    return HttpResponseRedirect(reverse('leds:index'))
