@@ -37,7 +37,7 @@ class Board(models.Model):
     height = models.PositiveSmallIntegerField(default=8)
     width = models.PositiveSmallIntegerField(default=32)
     label = models.CharField(default="board", max_length=30)
-    leds = []
+    leds = models.ManyToManyField(LED)
 
     def __str__(self):
         return self.label
@@ -46,10 +46,9 @@ class Board(models.Model):
         dat = serializers.serialize("json", self)
         return dat
 
-    def default_init(self):
-        self.leds = []
-        for i in range(self.width * self.height):
-            self.leds.append(LED.objects.get(index=i))
+    def show_leds(self):
+        for led in self.leds.all():
+            print(led.index)
 
     def size(self):
         return self.width * self.height
@@ -60,7 +59,7 @@ class Board(models.Model):
             row = []
             for x in range(self.width):
                 idx = x * self.height + y
-                row.append(self.leds[idx])
+                row.append(self.leds.get(index=idx))
             ret.append(row)
         return ret
 

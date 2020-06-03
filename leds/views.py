@@ -9,8 +9,8 @@ from .models import Color, Board, LED
 
 def index(request):
     """Homepage"""
-    board = Board()
-    board.default_init()
+    board = Board.objects.get(label='display')
+    
     arr = board.display_arr()
     all_colors = Color.objects.all()
     try:
@@ -87,5 +87,8 @@ def LED_click(request, led_index):
         led.color = color
         # save
         led.save()
+
+        print('set ', led_index, ' to ', color)
+
     # return to original page   
     return HttpResponseRedirect(reverse('leds:index'))
