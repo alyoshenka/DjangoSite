@@ -15,4 +15,13 @@
     {% endblock %}
     <br>
 
+    {% if current_board %}
+    <br>
+    {% block current_board_display %}
+        {% with current_board as board and arr as current_arr %}
+        {% include "leds/board.html" %}
+        {% endwith %}
+    {% endblock %}
+    {% endif %}
+
 {% endblock %}

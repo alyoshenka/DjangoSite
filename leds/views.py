@@ -9,30 +9,28 @@ from .models import Color, Board, LED
 
 def index(request):
     """Homepage"""
-    board = Board.objects.get(label='display')
-    
-    arr = board.display_arr()
+
     all_colors = Color.objects.all() # change to selected colors
     all_boards = Board.objects.all() # change to selected boards
 
     try:
-        current_color = request.session['current_color']
+        current_color_label = request.session['current_color']
     except:
-        request.session['current_color'] = 'none'
-        current_color = 'none'
+        current_color_label = None
 
     try:
-        current_board = request.session['current_board']
+        current_board_label = request.session['current_board']
+        current_board = Board.objects.get(label=current_board_label)
+        current_arr = current_board.display_arr()
     except:
-        request.session['current_board'] = 'none'
-        current_board = 'none'
+        current_board = None
+        current_arr = None
 
     context = { 
-        'board': board,
-        'arr': arr,
+        'current_arr': current_arr,
         'colors': all_colors,
         'boards': all_boards,
-        'current_color': current_color,
+        'current_color': current_color_label,
         'current_board': current_board
      }
     return render(request, 'leds/index.html', context)
@@ -131,7 +129,7 @@ def board_click(request, board_label):
 
     if not 'current_board' in request.session:
         request.session['current_board'] = 'none'
-    elif request.session['current_board'] == label:
+    elif request.session['current_board'] == label:     
         request.session['current_board'] = 'none'
     else:
         request.session['current_board'] = label
