@@ -17,27 +17,13 @@ class Color(models.Model):
         dat = serializers.serialize("json", [self])
         return dat
 
-class LED(models.Model):
-    index = models.IntegerField(default=0)
-    color = models.ForeignKey(
-        Color, on_delete=models.CASCADE,
-    )
-
-    def __str__(self):
-        return str(self.index)
-
-    def json(self):
-        dat = serializers.serialize("json", [self])
-        return dat
-
-    def color_style(self):
-        return "--color: " + self.color.label + ";"
 
 class Board(models.Model):
     height = models.PositiveSmallIntegerField(default=8)
     width = models.PositiveSmallIntegerField(default=32)
     label = models.CharField(default="board", max_length=30)
-    leds = models.ManyToManyField(LED)
+
+    # one to many leds
 
     def __str__(self):
         return self.label
@@ -45,10 +31,6 @@ class Board(models.Model):
     def json(self):
         dat = serializers.serialize("json", [self])
         return dat
-
-    def show_leds(self):
-        for led in self.leds.all():
-            print(led.index)
 
     def size(self):
         return self.width * self.height
@@ -59,12 +41,38 @@ class Board(models.Model):
             row = []
             for x in range(self.width):
                 idx = x * self.height + y
-                row.append(self.leds.get(index=idx))
+                row.append(LEDS.objects.get(board=self))
             ret.append(row)
         return ret
 
     def divisible_by_height(self, num):
         return num % self.height == 0
 
-    def led(self, idx):
-        return self.leds[idx]
+    #def led(self, idx):
+        #return self.leds[idx]
+
+
+class LED(models.Model):
+    index = models.IntegerField(default=0)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, default='')
+
+    def __str__(self):
+        return self.board.label + ":" + str(self.index)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check = models.Q(                   
+                    index__gte=0
+                ),
+                name = "leds_LED_index_gte_0"
+            )
+        ]
+
+    def json(self):
+        dat = serializers.serialize("json", [self])
+        return dat
+
+    def color_style(self):
+        return "--color: " + self.color.label + ";"
