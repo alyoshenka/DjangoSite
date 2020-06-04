@@ -12,17 +12,28 @@ def index(request):
     board = Board.objects.get(label='display')
     
     arr = board.display_arr()
-    all_colors = Color.objects.all()
+    all_colors = Color.objects.all() # change to selected colors
+    all_boards = Board.objects.all() # change to selected boards
+
     try:
         current_color = request.session['current_color']
     except:
         request.session['current_color'] = 'none'
         current_color = 'none'
+
+    try:
+        current_board = request.session['current_board']
+    except:
+        request.session['current_board'] = 'none'
+        current_board = 'none'
+
     context = { 
         'board': board,
         'arr': arr,
         'colors': all_colors,
-        'current_color': current_color
+        'boards': all_boards,
+        'current_color': current_color,
+        'current_board': current_board
      }
     return render(request, 'leds/index.html', context)
 
@@ -34,6 +45,12 @@ def color(request, color_name):
     }
     return render(request, 'leds/color.html', context)
 
+def board(request, board_label):
+    """Displays information for a given board"""
+    board = get_object_or_404(Board, label=board_label)
+    context = { 'board': board }
+    return render(request, 'leds/board.html', context)
+
 def all_colors(request):
     """Show all the colors"""
     all_colors = Color.objects.all()    
@@ -41,6 +58,12 @@ def all_colors(request):
         'all_colors': all_colors
     }
     return render(request, 'leds/all_colors.html', context)
+
+def all_boards(request):
+    """Show all boards"""
+    all_boards = Board.objects.all()
+    context = { 'all_boards': all_boards }
+    return render(request, 'leds/all_boards.html', context)
 
 def set_led_color(request, board_label, led_idx, color_label):
 
@@ -57,26 +80,15 @@ def set_led_color(request, board_label, led_idx, color_label):
 # session testing
 
 def selected_color(request):
+    """Get selected color from session"""
     _label = request.session['current_color']
     color = None if _label == 'none' else Color.objects.get(label=_label)
     return color
 
-def color_click(request, color_label):
-    color = Color.objects.get(label=color_label)
-    obj = json.loads(color.json())[0]
-    label = obj.get('fields').get('label')
-
-    if not 'current_color' in request.session:
-        request.session['current_color'] = 'none'
-    elif request.session['current_color'] == label:
-        request.session['current_color'] = 'none'
-    else:
-        request.session['current_color'] = label
-
-    # return HttpResponse(request.session['current_color'])
-    return HttpResponseRedirect(reverse('leds:index'))
 
 def LED_click(request, led_index):
+    """An LED in a board is clicked
+        set LED color"""
     # get selected color
     # find associated color by label
     color = selected_color(request)
@@ -91,4 +103,37 @@ def LED_click(request, led_index):
         print('set ', led_index, ' to ', color)
 
     # return to original page   
+    return HttpResponseRedirect(reverse('leds:index'))
+
+def color_click(request, color_label):
+    """A displayed color is clicked
+        select color"""
+    color = Color.objects.get(label=color_label)
+    obj = json.loads(color.json())[0]
+    label = obj.get('fields').get('label')
+
+    if not 'current_color' in request.session:
+        request.session['current_color'] = 'none'
+    elif request.session['current_color'] == label:
+        request.session['current_color'] = 'none'
+    else:
+        request.session['current_color'] = label
+
+    # return HttpResponse(request.session['current_color'])
+    return HttpResponseRedirect(reverse('leds:index'))
+
+def board_click(request, board_label):
+    """A displayed board is clicked
+        select board"""
+    board = Board.objects.get(label=board_label)
+    obj = json.loads(board.json())[0]
+    label = obj.get('fields').get('label')
+
+    if not 'current_board' in request.session:
+        request.session['current_board'] = 'none'
+    elif request.session['current_board'] == label:
+        request.session['current_board'] = 'none'
+    else:
+        request.session['current_board'] = label
+
     return HttpResponseRedirect(reverse('leds:index'))

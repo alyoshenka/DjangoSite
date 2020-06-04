@@ -1,0 +1,11 @@
+
+<h3>Boards:</h3>
+<p>Current Board: {{ current_board }}</p>
+<a href='boards/'>View boards</a><br>
+<br><br>
+
+{% for board in boards %}
+<form class='led' action='boardClick/{{ board.label }}/' method='GET'>
+    <button class='board' type='submit'>{{ board.label }}</button>
+</form>
+{% endfor %}

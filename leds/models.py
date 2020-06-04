@@ -43,7 +43,7 @@ class Board(models.Model):
         return self.label
 
     def json(self):
-        dat = serializers.serialize("json", self)
+        dat = serializers.serialize("json", [self])
         return dat
 
     def show_leds(self):

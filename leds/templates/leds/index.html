@@ -3,15 +3,16 @@
 
     <p>LEDs index (html)</p>
 
- 
-
+    <br>
     {% block colors %}
-        {% include "leds/colors.html" %}
+        {% include "leds/color_preview.html" %}
     {% endblock %}
+    <br>
 
- 
-    {% block board %}
-        {% include "leds/board.html" %}
+    <br>
+    {% block boards %}
+        {% include "leds/board_preview.html" %}
     {% endblock %}
+    <br>
 
 {% endblock %}

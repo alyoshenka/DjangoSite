@@ -3,6 +3,10 @@
     --button-margin: 5px;
 }
 
+form.led {
+    display: inline;
+}
+
 button.led {
     width: var(--button-size);
     height: var(--button-size);
@@ -12,13 +16,15 @@ button.led {
     font-size: 10px;
 }
 
-form.led {
-    display: inline;
-}
-
 button.color {
     background-color: gray;
     width: 60px;
     height: 30px;
     color: var(--color);
+}
+
+button.board {
+    background-color: gray;
+    width: 60px;
+    height: 30px;
 }

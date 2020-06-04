@@ -1,10 +1,8 @@
-<br>
 
-<a href='colors/'>View colors</a>
-
-<br>
-<p>Colors:</p>
+<h3>Colors:</h3>
 <p>Current Color: {{ current_color }}</p>
+<br>
+<a href='colors/'>View colors</a><br>
 <br>
 
 {% for color in colors %}
@@ -13,4 +11,3 @@
         this, '{{ color.json }}')">{{ color.label }}</button>
 </form>
 {% endfor %}
-<br>

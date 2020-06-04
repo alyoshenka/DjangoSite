@@ -1,0 +1,7 @@
+<h3>All Boards:</h3>
+
+{% for board in all_boards %}
+    <a href="{% url 'leds:board' board.label %}">
+        {{ board.label }}
+    </a>
+{% endfor %}
