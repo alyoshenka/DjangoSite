@@ -6,7 +6,7 @@
 {% for col in arr %}
     {% for led in col %}
     <form class='led' action='LED_click/{{ led.index }}' method='GET'>
-        <button class="led" onclick=changeLEDColor(this)>{{ led.color }}</button>
+        <button class="led">{{ led.color }}</button>
     </form>
     {% endfor %}
     <br>

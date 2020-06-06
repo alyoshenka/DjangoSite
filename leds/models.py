@@ -2,6 +2,8 @@ from django.db import models
 from django.core import serializers
 
 
+
+
 class Color(models.Model):
     label = models.CharField(default="no_label", max_length=20)
     r = models.PositiveSmallIntegerField(default=0)
@@ -27,23 +29,25 @@ class Board(models.Model):
 
     def __str__(self):
         return self.label
-
-    def json(self):
-        dat = serializers.serialize("json", [self])
-        return dat
-
-    def size(self):
-        return self.width * self.height
-
+        
+    # display array of leds
     def display_arr(self):
         ret = []
         for y in range(self.height):
             row = []
             for x in range(self.width):
                 idx = x * self.height + y
-                row.append(LEDS.objects.get(board=self))
+                led = LED.objects.get(board=self, index=idx)
+                row.append(led)
             ret.append(row)
         return ret
+
+    def json(self):
+        dat = serializers.serialize("json", [self])
+        return dat
+
+    def size(self):
+        return self.width * self.height      
 
     def divisible_by_height(self, num):
         return num % self.height == 0
@@ -62,12 +66,12 @@ class LED(models.Model):
 
     class Meta:
         constraints = [
+            # index >= 0
             models.CheckConstraint(
-                check = models.Q(                   
-                    index__gte=0
-                ),
-                name = "leds_LED_index_gte_0"
+                check = models.Q(index__gte=0),
+                name = 'leds_LED_index_gte_0'
             )
+            # no duplicate index for board
         ]
 
     def json(self):
@@ -76,3 +80,4 @@ class LED(models.Model):
 
     def color_style(self):
         return "--color: " + self.color.label + ";"
+

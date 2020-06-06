@@ -1,5 +1,6 @@
 from raylibpy import *
 
+from leds.models import Board, LED
 
 class DisplayBoard():
 
@@ -10,7 +11,7 @@ class DisplayBoard():
         self.label = board.label
         self.offset = 25
 
-        self.dots = board.leds.all()
+        self.dots = LED.objects.filter(board=board)
 
         assert(len(self.dots) == self.width * self.height)
 

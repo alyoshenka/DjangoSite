@@ -46,7 +46,8 @@ def color(request, color_name):
 def board(request, board_label):
     """Displays information for a given board"""
     board = get_object_or_404(Board, label=board_label)
-    context = { 'board': board }
+    arr = board.display_arr()
+    context = { 'board': board, 'arr': arr }
     return render(request, 'leds/board.html', context)
 
 def all_colors(request):
@@ -90,9 +91,17 @@ def LED_click(request, led_index):
     # get selected color
     # find associated color by label
     color = selected_color(request)
-    if color is not None:
+    # get currently displayed board in session
+    try:
+        board_label = request.session['current_board']
+        board = Board.objects.get(label=board_label)
+    except:
+        board = None
+        
+    if color is not None and board is not None:
         # find LED associated to button (by idx)
-        led = LED.objects.get(index=led_index)
+        #   and board
+        led = LED.objects.get(index=led_index, board=board)
         # set LED color to color
         led.color = color
         # save
@@ -134,4 +143,5 @@ def board_click(request, board_label):
     else:
         request.session['current_board'] = label
 
+    #return HttpResponse(request.session['current_board'])
     return HttpResponseRedirect(reverse('leds:index'))
